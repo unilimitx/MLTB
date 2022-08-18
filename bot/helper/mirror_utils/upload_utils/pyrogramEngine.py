@@ -6,7 +6,7 @@ from PIL import Image
 from threading import RLock
 
 from bot import AS_DOCUMENT, AS_DOC_USERS, AS_MEDIA_USERS, CUSTOM_FILENAME, EXTENSION_FILTER, app
-from bot.helper.ext_utils.fs_utils import take_ss, get_media_info, get_media_streams, clean_unwanted
+from bot.helper.ext_utils.fs_utils import take_ss, get_media_info, get_media_streams, clean_unwanted, get_path_size
 from bot.helper.ext_utils.bot_utils import get_readable_file_size
 
 LOGGER = getLogger(__name__)
@@ -65,13 +65,14 @@ class TgUploader:
 
     def __upload_file(self, up_path, file_, dirpath):
         if CUSTOM_FILENAME is not None:
-            cap_mono = f"{CUSTOM_FILENAME} <code>{file_}</code>"
+            cap_mono = f"{CUSTOM_FILENAME} <code>{file_}</code> {f_size}"
             file_ = f"{CUSTOM_FILENAME} {file_}"
             new_path = ospath.join(dirpath, file_)
             osrename(up_path, new_path)
             up_path = new_path
         else:
-            cap_mono = f"<code>{file_}</code>"
+            f_size = f"<i>{get_readable_file_size(get_path_size(up_path))}</i>"
+            cap_mono = f"<code>{file_}</code> {f_size}"
         notMedia = False
         thumb = self.__thumb
         self.__is_corrupted = False
