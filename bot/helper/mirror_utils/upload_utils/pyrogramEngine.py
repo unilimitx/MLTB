@@ -64,6 +64,7 @@ class TgUploader:
         self.__listener.onUploadComplete(None, size, self.__msgs_dict, self.__total_files, self.__corrupted, self.name)
 
     def __upload_file(self, up_path, file_, dirpath):
+        f_size = f"<i>{get_readable_file_size(get_path_size(up_path))}</i>"
         if CUSTOM_FILENAME is not None:
             cap_mono = f"{CUSTOM_FILENAME} <code>{file_}</code> {f_size}"
             file_ = f"{CUSTOM_FILENAME} {file_}"
@@ -71,7 +72,6 @@ class TgUploader:
             osrename(up_path, new_path)
             up_path = new_path
         else:
-            f_size = f"<i>{get_readable_file_size(get_path_size(up_path))}</i>"
             cap_mono = f"<code>{file_}</code> {f_size}"
         notMedia = False
         thumb = self.__thumb
